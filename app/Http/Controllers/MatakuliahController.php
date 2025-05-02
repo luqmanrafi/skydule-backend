@@ -33,37 +33,55 @@ class MatakuliahController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_matakuliah' => 'required',
-            'nama_matakuliah' => 'required|string',
-            'dosen_pengajar' => 'required|string',
-            'jenis_matakuliah' => 'required',
-            'hari' => 'required',
-            'jam_mulai' => 'required',
-            'jam_selesai' => 'required',
-            'ruangan' => 'required',
+            'matakuliah' => 'required|array',
+            'matakuliah.*.id_matakuliah' => 'required',
+            'matakuliah.*.nama_matakuliah' => 'required|string',
+            'matakuliah.*.dosen_pengajar' => 'required|string',
+            'matakuliah.*.jenis_matakuliah' => 'required',
+            'matakuliah.*.hari' => 'required',
+            'matakuliah.*.jam_mulai' => 'required',
+            'matakuliah.*.jam_selesai' => 'required',
+            'matakuliah.*.ruangan' => 'required',
         ]);
-        $matakuliah = Matakuliah::create([
-            'id_matakuliah' => $request->id_matakuliah,
-            'nama_matakuliah' => $request->nama_matakuliah,
-            'dosen_pengajar' => $request->dosen_pengajar,
-            'jenis_matakuliah' => $request->jenis_matakuliah,
-            'hari' => $request->hari,
-            'jam_mulai' => $request->jam_mulai,
-            'jam_selesai' => $request->jam_selesai,
-            'ruangan' => $request->ruangan,
+        $datas = $request->matakuliah;
+        if (isset($datas[0])){
+         foreach($request->matakuliah as $data) {
+            Matakuliah::create([
+                'id_matakuliah' => $data['id_matakuliah'],
+                'nama_matakuliah' => $data['nama_matakuliah'],
+                'dosen_pengajar' => $data['dosen_pengajar'],
+                'jenis_matakuliah' => $data['jenis_matakuliah'],
+                'hari' => $data['hari'],
+                'jam_mulai' => $data['jam_mulai'],
+                'jam_selesai' => $data['jam_selesai'],
+                'ruangan' => $data['ruangan'],
+            ]);
+        }
+    } else {
+        Matakuliah::create([
+                'id_matakuliah' => $request->id_matakuliah,
+                'nama_matakuliah' => $request->nama_matakuliah,
+                'dosen_pengajar' => $request->dosen_pengajar,
+                'jenis_matakuliah' => $request->jenis_matakuliah,
+                'hari' => $request->hari,
+                'jam_mulai' => $request->jam_mulai,
+                'jam_selesai' => $request->jam_selesai,
+                'ruangan' => $request->ruangan,
         ]);
+    }
+        
         return response()->json([
-            'message' => 'Jadwal berhasil dibuat',
-            'data' => $matakuliah,
+            'message' => 'Jadwal created successfully',
+            'data' => $data
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show($id_matakuliah)
     {
-        $matakuliah = Matakuliah::find($id);
+        $matakuliah = Matakuliah::where('id_matakuliah', $id_matakuliah);
         if (!$matakuliah) {
             return response()->json([
                 'message' => 'Jadwal not found',
