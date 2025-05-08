@@ -14,3 +14,14 @@ Route::get('/matakuliah/{id}', [MatakuliahController::class, 'show'])->name('mat
 Route::post('/matakuliah-create', [MatakuliahController::class, 'store'])->name('matakuliah.create');
 Route::patch('/matakuliah/{id}', [MatakuliahController::class, 'update'])->name('matakuliah.update');
 Route::delete('/matakuliah/{id}', [MatakuliahController::class, 'destroy'])->name('matakuliah.destroy');    
+
+use Illuminate\Support\Facades\DB;
+
+Route::get('/test-mongodb', function () {
+    try {
+        $databases = DB::connection('mongodb')->getMongoClient()->listDatabases();
+        return response()->json($databases);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+});

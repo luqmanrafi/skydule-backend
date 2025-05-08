@@ -79,7 +79,7 @@ class MatakuliahController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id_matakuliah)
+    public function show(string $id_matakuliah)
     {
         $matakuliah = Matakuliah::where('id_matakuliah', $id_matakuliah);
         if (!$matakuliah) {
