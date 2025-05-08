@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
-class TugasModels extends Model
+class Tugas extends Model
 {
     protected $connection = 'mongodb';
     protected $collection = 'tugas';

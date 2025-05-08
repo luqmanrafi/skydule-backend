@@ -8,7 +8,6 @@ class CreateTugasCollection extends Migration
 {
     public function up()
     {
-        // Membuat koleksi 'tugas' jika belum ada
         Schema::connection('mongodb')->create('tugas', function ($collection) {
             $collection->index('nama_matakuliah');
             $collection->index('judul_tugas');
@@ -19,7 +18,7 @@ class CreateTugasCollection extends Migration
 
     public function down()
     {
-        // Menghapus koleksi 'tugas' jika perlu
+   
         Schema::connection('mongodb')->drop('tugas');
     }
 }
