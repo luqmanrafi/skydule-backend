@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: skydule-backend
+    env: docker
+    plan: free
+    branch: main
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_NAME
+        value: Skydule
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        value: base64:yEkbrYU1YFLx/7R+0JHt+aJGEh+YZ5V607srBctRX6U=
+      - key: DB_CONNECTION
+        value: mongodb
+      - key: DB_HOST
+        value: mongodb+srv://luqmanshit7:luqmanganteng66@skydule.gmomrrw.mongodb.net/
+      - key: DB_DATABASE
+        value: skydule
