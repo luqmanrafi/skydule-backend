@@ -2,10 +2,16 @@
 
 use App\Http\Controllers\JadwalController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/jadwal', [JadwalController::class, 'index'])->name('jadwal.index');
-Route::get('/jadwal/{id}', [JadwalController::class, 'show'])->name('jadwal.byId');
+Route::get('/auth/google/redirect', function () {
+    return Socialite::driver('google')->redirect();
+});
+Route::get('/auth/google/callback', function(){
+    $user = Socialite::driver('google')->user();
+    dd($user);
+});
