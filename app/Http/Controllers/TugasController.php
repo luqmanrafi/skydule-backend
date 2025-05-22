@@ -32,7 +32,7 @@ class TugasController extends Controller
         ]);
 
         $data = [];
-
+    try {
         if ($request->has('tugas') && is_array($request->tugas)) {
             foreach ($request->tugas as $item) {
                 $data[] = Tugas::create($item);
@@ -45,11 +45,16 @@ class TugasController extends Controller
                 'deskripsi_tugas' => $request->deskripsi_tugas,
             ]);
         }
-
         return response()->json([
             'message' => 'Tugas berhasil dibuat',
             'data' => $data,
         ], 201);
+        } catch (\Exception $e) {
+        return response()->json([
+            'message' => 'Gagal membuat tugas',
+            'error' => $e->getMessage(),
+        ], 500);
+        }
     }
 
     public function show($id)
