@@ -10,7 +10,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('matakuliah.index') }}">Mata Kuliah</a>
+            <a class="navbar-brand" href="{{ route('dashboard') }}">Home</a>
         </div>
     </nav>
 

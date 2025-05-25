@@ -3,7 +3,8 @@
 @section('content')
 <div class="container mt-5">
     <h2 class="mb-4">Dashboard Kuliah</h2>
-
+    <a href="{{ route('matakuliah.index') }}" class="btn btn-primary mb-3">Matakuliah</a>
+    <a href="{{ route('tugas.index') }}" class="btn bg-success text-white mb-3">Tugas</a>
     <div class="row">
         {{-- Jadwal Mata Kuliah --}}
         <div class="col-md-6">
@@ -20,7 +21,14 @@
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <div>
                                         <strong>{{ $mk->nama_matakuliah }}</strong><br>
-                                        <small>{{ $mk->hari }} : {{ $mk->jam_mulai }} - {{ $mk->jam_selesai }}</small>
+                                        <div class="d-flex gap-3 ">
+
+                                            <small>{{ $mk->hari }} : {{ $mk->jam_mulai }} - {{ $mk->jam_selesai }}</small>
+                                            
+                                            <small>Dosen Pengajar: <span class="fw-bold">
+                                                {{ $mk->dosen_pengajar}}
+                                                </span></small>
+                                        </div>
                                     </div>
                                     <span class="badge bg-secondary">{{ $mk->ruangan }}</span>
                                 </li>

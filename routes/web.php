@@ -8,9 +8,6 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Models\Tugas;
 use App\Models\Matakuliah;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 Route::get('/home', function () {   
     return view('home');
 });
@@ -42,9 +39,9 @@ Route::put('/tugas/{id}', [TugasController::class, 'bladeUpdate'])->name('tugas.
 Route::delete('/tugas/{id}', [TugasController::class, 'destroyBlade'])->name('tugas.destroy');
 
 //Route Dashboard
-Route::get('/dashboard', function () {
+Route::get('/', function () {
     return view('dashboard', [
         'matakuliah' => Matakuliah::all(),
         'tugas' => Tugas::orderBy('deadline_tugas', 'asc')->get()
     ]);
-});
+})->name('dashboard');
