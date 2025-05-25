@@ -12,6 +12,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+
 // Route for matakuliah
 Route::resource('matakuliah', MatakuliahController::class); 
 
