@@ -12,13 +12,16 @@ class MatakuliahController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $matakuliah = Matakuliah::all();
+        if ($request->wantsJson()) {
         return response()->json([
             'message' => 'Jadwal retrieved successfully',
             'data' => $matakuliah,
         ], 200);
+    }
+     return view('matakuliah.index', compact('matakuliah'));
     }
 
     /**
@@ -126,19 +129,25 @@ class MatakuliahController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(String $id)
+    public function edit(Request $request, String $id)
     {
         $matakuliah = Matakuliah::find($id);
         if (!$matakuliah) {
+        if ($request->wantsJson()) {
             return response()->json([
-                'message' => 'Jadwal not found',
+                'message' => 'Matakuliah not found',
             ], 404);
         }
-        $matakuliah->edit();
+        abort(404);
+    }
+
+    if ($request->wantsJson()) {
         return response()->json([
-            'message' => 'Jadwal retrieved successfully',
+            'message' => 'Matakuliah retrieved successfully',
             'data' => $matakuliah,
         ], 200);
+    }
+     return view('matakuliah.edit', compact('matakuliah'));
     }
 
     /**
@@ -146,50 +155,64 @@ class MatakuliahController extends Controller
      */
     public function update(Request $request, String $id)
     {
-        $matakuliah = Matakuliah::find($id);
-        if (!$matakuliah) {
-            return response()->json([
-                'message' => 'Jadwal not found',
-            ], 404);
+         $matakuliah = Matakuliah::find($id);
+    if (!$matakuliah) {
+        if ($request->wantsJson()) {
+            return response()->json(['message' => 'Matakuliah not found'], 404);
         }
-        $request->validate([
-            'nama_matakuliah' => 'required|string',
-            'dosen_pengajar' => 'required|string',
-            'jenis_matakuliah' => 'required',
-            'hari' => 'required',
-            'jam_mulai' => 'required',
-            'jam_selesai' => 'required',
-            'ruangan' => 'required',
-        ]);
-        $matakuliah->update([
-            'nama_matakuliah' => $request->nama_matakuliah,
-            'dosen_pengajar' => $request->dosen_pengajar,
-            'jenis_matakuliah' => $request->jenis_matakuliah,
-            'hari' => $request->hari,
-            'jam_mulai' => $request->jam_mulai,
-            'jam_selesai' => $request->jam_selesai,
-            'ruangan' => $request->ruangan,
-        ]);
+        return redirect()->route('matakuliah.index')->with('error', 'Matakuliah tidak ditemukan.');
+    }
+
+    $request->validate([
+        'nama_matakuliah' => 'required|string',
+        'dosen_pengajar' => 'required|string',
+        'jenis_matakuliah' => 'required',
+        'hari' => 'required',
+        'jam_mulai' => 'required',
+        'jam_selesai' => 'required',
+        'ruangan' => 'required',
+    ]);
+
+    $matakuliah->update([
+        'nama_matakuliah' => $request->nama_matakuliah,
+        'dosen_pengajar' => $request->dosen_pengajar,
+        'jenis_matakuliah' => $request->jenis_matakuliah,
+        'hari' => $request->hari,
+        'jam_mulai' => $request->jam_mulai,
+        'jam_selesai' => $request->jam_selesai,
+        'ruangan' => $request->ruangan,
+    ]);
+
+    if ($request->wantsJson()) {
         return response()->json([
-            'message' => 'Jadwal berhasil diperbarui',
+            'message' => 'Matakuliah berhasil diperbarui',
             'data' => $matakuliah,
         ], 200);
+    }
+
+    return redirect()->route('matakuliah.index')->with('success', 'Matakuliah berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(String $id)
-    {
-        $matakuliah = Matakuliah::find($id);
-        if (!$matakuliah) {
-            return response()->json([
-                'message' => 'Jadwal not found',
-            ], 404);
+    public function destroy(Request $request, String $id)
+{
+    $matakuliah = Matakuliah::find($id);
+    if (!$matakuliah) {
+        if ($request->wantsJson()) {
+            return response()->json(['message' => 'Matakuliah not found'], 404);
         }
-        $matakuliah->delete();
-        return response()->json([
-            'message' => 'Jadwal berhasil dihapus',
-        ], 200);
+        return redirect()->route('matakuliah.index')->with('error', 'Matakuliah tidak ditemukan.');
     }
+
+    $matakuliah->delete();
+
+    if ($request->wantsJson()) {
+        return response()->json(['message' => 'Matakuliah berhasil dihapus'], 200);
+    }
+
+    return redirect()->route('matakuliah.index')->with('success', 'Matakuliah berhasil dihapus.');
+}
+
 }
