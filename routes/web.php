@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\TugasController;
 use App\Http\Controllers\MatakuliahController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
+use App\Models\Tugas;
+use App\Models\Matakuliah;
 
 Route::get('/', function () {
     return view('welcome');
@@ -11,6 +14,8 @@ Route::get('/', function () {
 Route::get('/home', function () {   
     return view('home');
 });
+
+//Route untuk jadwal
 Route::get('/matakuliah', [MatakuliahController::class, 'index'])->name('matakuliah.index');
 Route::get('/matakuliah/create', function () {
     return view('matakuliah.create');
@@ -26,4 +31,20 @@ Route::get('/auth/google/redirect', function () {
 Route::get('/auth/google/callback', function(){
     $user = Socialite::driver('google')->user();
     dd($user);
+});
+
+//Route untuk Tugas
+Route::get('/tugas', [TugasController::class, 'bladeIndex'])->name('tugas.index');
+Route::get('/tugas/create', [TugasController::class, 'create'])->name('tugas.create');
+Route::post('/tugas', [TugasController::class, 'bladeStore'])->name('tugas.store');
+Route::get('/tugas/{id}/edit', [TugasController::class, 'edit'])->name('tugas.edit');
+Route::put('/tugas/{id}', [TugasController::class, 'bladeUpdate'])->name('tugas.update');
+Route::delete('/tugas/{id}', [TugasController::class, 'destroyBlade'])->name('tugas.destroy');
+
+//Route Dashboard
+Route::get('/dashboard', function () {
+    return view('dashboard', [
+        'matakuliah' => Matakuliah::all(),
+        'tugas' => Tugas::orderBy('deadline_tugas', 'asc')->get()
+    ]);
 });
