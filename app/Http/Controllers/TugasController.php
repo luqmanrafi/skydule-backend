@@ -102,4 +102,55 @@ class TugasController extends Controller
 
         return response()->json(['message' => 'Tugas berhasil dihapus']);
     }
+    
+
+    //CONTROLLER UNTUK BLADE JANGAN DI HAPUS
+
+    public function bladeIndex()
+    {
+        $tugas = Tugas::all();
+        return view('tugas.index', compact('tugas'));
+    }
+    public function bladeStore(Request $request)
+    {
+        $request->validate([
+            'nama_matakuliah' => 'required|string',
+            'judul_tugas' => 'required|string',
+            'deadline_tugas' => 'required|date',
+            'deskripsi_tugas' => 'nullable|string',
+        ]);
+
+        Tugas::create($request->all());
+        return redirect()->route('tugas.index')->with('success', 'Tugas berhasil ditambahkan.');
+    }
+    public function bladeUpdate(Request $request, $id)
+    {
+        $request->validate([
+            'nama_matakuliah' => 'required|string',
+            'judul_tugas' => 'required|string',
+            'deadline_tugas' => 'required|date',
+            'deskripsi_tugas' => 'nullable|string',
+        ]);
+
+        $tugas = Tugas::findOrFail($id);
+        $tugas->update($request->all());
+
+        return redirect()->route('tugas.index')->with('success', 'Tugas berhasil diperbarui.');
+    }
+    public function destroyBlade($id)
+    {
+        $tugas = Tugas::findOrFail($id);
+        $tugas->delete();
+
+        return redirect()->route('tugas.index')->with('success', 'Tugas berhasil dihapus.');
+    }
+    public function edit($id)
+    {
+        $tugas = Tugas::findOrFail($id);
+        return view('tugas.edit', compact('tugas'));
+    }
+    public function create()
+    {
+        return view('tugas.create');
+    }
 }
